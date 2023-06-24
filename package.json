@@ -1,0 +1,10 @@
+{
+  "name": "discord-emoji-utils",
+  "version": "1.0.0",
+  "description": "A utility library for managing custom emoji cache.",
+  "main": "index.js",
+  "dependencies": {
+    "image-hash": "^5.0.0",
+    "node-fetch": "^2.6.1"
+  }
+}
