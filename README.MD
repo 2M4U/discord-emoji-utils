@@ -1,27 +1,28 @@
 # Discord Emoji Utils
 
-Discord Emoji Utils is an advanced utility library for managing custom emoji cache in Discord applications. It provides functions to remove duplicate emojis based on their ID and name or by their image hash. It also offers additional features such as emoji download and upload capabilities.
+Discord Emoji Utils is a utility library for managing custom emoji cache in Discord applications. It provides functions to add emojis, remove duplicate emojis based on their ID and name or by their image hash, and perform additional operations such as emoji download and upload.
 
 ## Installation
-```bash
+
+
+Install the package using npm:
+
+```shell
 npm install discord-emoji-utils
 ```
-*Note, Not published yet!*
-## Usage
-```js
-const DiscordEmojiUtils = require('discord-emoji-utils');
 
-// Create an instance of DiscordEmojiUtils
-const emojiUtils = new DiscordEmojiUtils();
+## Usage
+
+```javascript
+const { EmojiUtils } = require('discord-emoji-utils');
+
+// Create an instance of EmojiUtils
+const emojiUtils = new EmojiUtils();
 
 // Add emojis to the utility
-const emoji1 = { id: '1', name: 'emoji1', imageUrl: 'https://example.com/emoji1.png' };
-const emoji2 = { id: '2', name: 'emoji2', imageUrl: 'https://example.com/emoji2.png' };
-const emoji3 = { id: '3', name: 'emoji3', imageUrl: 'https://example.com/emoji3.png' };
-
-emojiUtils.addEmoji(emoji1);
-emojiUtils.addEmoji(emoji2);
-emojiUtils.addEmoji(emoji3);
+emojiUtils.addEmoji({ id: '1', name: 'emoji1', imageUrl: 'https://example.com/emoji1.png' });
+emojiUtils.addEmoji({ id: '2', name: 'emoji2', imageUrl: 'https://example.com/emoji2.png' });
+emojiUtils.addEmoji({ id: '3', name: 'emoji3', imageUrl: 'https://example.com/emoji3.png' });
 
 // Remove duplicate emojis by ID and name
 emojiUtils.removeDuplicateEmojis();
@@ -33,60 +34,105 @@ emojiUtils.removeDuplicateEmojisByImageHash();
 const updatedEmojis = emojiUtils.getEmojis();
 console.log(updatedEmojis);
 
-// Download emojis to a folder
-const destinationFolder = './emojis';
-const downloads = await emojiUtils.downloadEmojis(destinationFolder);
-console.log('Emojis downloaded:', downloads);
-
-// Assuming 'client' is a Discord.js client instance
-const guildId = '1234567890'; // Replace with the desired guild ID
-const uploadedEmojis = await emojiUtils.uploadEmojis(client, guildId, downloads);
-console.log('Emojis uploaded:', uploadedEmojis);
+// Perform other operations such as emoji download and upload
 ```
+
 ## API
 
-`addEmoji(emoji)`
+### `addEmoji(emoji)`
 
 Adds an emoji to the utility.
 
-`emoji (object)`: An object representing the emoji with properties id, name, and imageUrl.
+- `emoji` (object): An object representing the emoji with properties `id`, `name`, and `imageUrl`.
 
-`removeDuplicateEmojis()`
+### `removeDuplicateEmojis()`
 
 Removes duplicate emojis from the cache based on their ID and name.
 
-`removeDuplicateEmojisByImageHash()`
+### `removeDuplicateEmojisByImageHash()`
 
 Removes duplicate emojis from the cache based on their image hash.
 
-`getEmojis()`
+### `getEmojis()`
 
 Returns the updated list of emojis after removing duplicates.
 
-`computeImageHash(imageUrl)`
+### `downloadImage(imageUrl)`
 
-Computes the image hash for the specified image URL.
+Downloads the image from the specified URL and returns a promise that resolves with the image data as a buffer.
 
-`imageUrl` (string): The URL of the image.
+- `imageUrl` (string): The URL of the image to download.
 
-`downloadEmojis(destinationFolder)`
+### `computeImageHash(imageUrl)`
 
-Downloads the custom emojis from their image URLs and saves them to the specified destination folder. It returns an array of objects containing the emoji name and file path of each downloaded emoji.
+Computes the image hash for the specified image URL using image processing techniques. Returns a promise that resolves with the computed image hash.
 
-`destinationFolder (string)`: The destination folder path for saving the downloaded emojis.
+- `imageUrl` (string): The URL of the image for which to compute the hash.
 
-`uploadEmojis(client, guildId, emojiDownloads)`
+## Examples
 
-Uploads the downloaded custom emojis to a Discord guild with the specified ID. It requires a Discord client instance (client), the `guild ID (guildId)`, and the array of emoji downloads obtained from the downloadEmojis method. It returns an array of uploaded emojis.
+### Downloading Emojis
 
-`client (object)`: The Discord.js client instance.
-`guildId (string)`: The ID of the guild where the emojis will be uploaded.
-`emojiDownloads (array)`: An array of objects containing the emoji name and file path of each downloaded emoji.
+```javascript
+const { EmojiUtils } = require('discord-emoji-utils');
 
-## Contributing
+const emojiUtils = new EmojiUtils();
 
-Contributions are welcome! Please check out the contribution guidelines for more details.
+// Add emojis to the utility
+emojiUtils.addEmoji({ id: '1', name: 'emoji1', imageUrl: 'https://example.com/emoji1.png' });
+emojiUtils.addEmoji({ id: '2', name: 'emoji2', imageUrl: 'https://example.com/emoji2.png' });
+emojiUtils.addEmoji({ id: '3', name: 'emoji3', imageUrl: 'https://example.com/emoji3.png' });
 
-## License
+// Download emojis to a folder
+const destinationFolder = './emojis';
+emojiUtils.downloadEmojis(destinationFolder)
+  .then(downloads => {
+    console.log('Emojis downloaded:', downloads);
+  })
+  .catch(error => {
+    console.error('Failed to download emojis:', error);
+  });
+```
 
+### Uploading Emojis
+
+```javascript
+const { EmojiUtils } = require('discord-emoji-utils');
+const Discord = require('discord.js');
+
+const emojiUtils = new EmojiUtils();
+const client = new Discord.Client();
+const guildId = '1234567890'; // Replace with the desired guild ID
+
+// Add emojis to the utility
+emojiUtils.addEmoji({ id: '1', name: 'emoji1', imageUrl: 'https://example.com/emoji1.png' });
+emojiUtils.addEmoji({ id: '2', name: 'emoji2', imageUrl: 'https://example.com/emoji2.png' });
+emojiUtils.addEmoji({ id: '3', name: 'emoji3', imageUrl: 'https://example.com/emoji3.png' });
+
+// Upload emojis to a Discord guild
+const uploadEmojis = async () => {
+try {
+await client.login('YOUR_DISCORD_TOKEN');
+const guild = await client.guilds.fetch(guildId);
+// Get the updated list of emojis
+const updatedEmojis = emojiUtils.getEmojis();
+
+// Upload emojis to the guild
+for (const emoji of updatedEmojis) {
+  const { id, name, imageUrl } = emoji;
+  const imageBuffer = await emojiUtils.downloadImage(imageUrl);
+  const uploadedEmoji = await guild.emojis.create(imageBuffer, name);
+  console.log('Uploaded emoji:', uploadedEmoji);
+}
+
+// Logout the client
+await client.logout();
+} catch (error) {
+console.error('Failed to upload emojis:', error);
+}
+};
+
+uploadEmojis();
+```
+# License
 This project is licensed under the [MIT License](#LICENSE).

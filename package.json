@@ -1,10 +1,32 @@
 {
   "name": "discord-emoji-utils",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "description": "A utility library for managing custom emoji cache.",
   "main": "index.js",
+  "keywords": [
+    "discord",
+    "utility",
+    "emojis"
+  ],
   "dependencies": {
-    "image-hash": "^5.0.0",
-    "node-fetch": "^2.6.1"
-  }
+    "axios": "^0.24.0",
+    "fs-extra": "^10.0.0",
+    "sharp": "^0.29.2"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2M4U/discord-emoji-utils.git"
+  },
+  "author": "2m4u",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/2M4U/discord-emoji-utils/issues"
+  },
+  "homepage": "https://github.com/2M4U/discord-emoji-utils#readme"
 }
